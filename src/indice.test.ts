@@ -2,7 +2,7 @@ import { describe, expect, it } from "vitest";
 import { indiceCatalogo, type EntradaIndice } from "./indice.js";
 
 const dirFixtures = new URL("./__fixtures__/indice", import.meta.url).pathname;
-const dirEjercicios = new URL("../../ejercicios", import.meta.url).pathname;
+const dirEjercicios = new URL("../ejercicios", import.meta.url).pathname;
 
 const IDs_ORDENADOS = ["estiramiento-hombro", "sentadilla-peso-libre"];
 

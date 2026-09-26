@@ -1,13 +1,6 @@
-import { existsSync, readdirSync, readFileSync } from "node:fs";
+import { readdirSync, readFileSync } from "node:fs";
 import { join } from "node:path";
-import { fileURLToPath } from "node:url";
 import { parse, type PosecodeIR } from "posecode-parser";
-
-/** Carpeta del catálogo resuelta desde el módulo (`src/` → raíz del repo). */
-const dirCatalogoDefault = join(
-  fileURLToPath(new URL("..", import.meta.url)),
-  "ejercicios",
-);
 
 export interface EntradaIndice {
   id: string;
@@ -94,16 +87,14 @@ function entradaPara(id: string, texto: string): EntradaIndice | null {
 /**
  * Índice del catálogo: un resumen por ejercicio para saber qué hay sin leer
  * cada archivo. Ordenado por `id`; los archivos que no parsean se omiten.
- * Si la carpeta dada no existe, se usa la carpeta `ejercicios/` del repo.
  */
 export function indiceCatalogo(dir: string): EntradaIndice[] {
-  const dirReal = existsSync(dir) ? dir : dirCatalogoDefault;
-  return readdirSync(dirReal)
+  return readdirSync(dir)
     .filter((f) => f.endsWith(".posecode"))
     .sort()
     .map((archivo) => {
       const id = archivo.slice(0, -".posecode".length);
-      return entradaPara(id, readFileSync(join(dirReal, archivo), "utf8"));
+      return entradaPara(id, readFileSync(join(dir, archivo), "utf8"));
     })
     .filter((entrada): entrada is EntradaIndice => entrada !== null);
 }
