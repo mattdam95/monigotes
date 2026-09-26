@@ -70,7 +70,7 @@ function tablaMarkdown(filas: Fila[]): string {
  * todo leído de `posecode-parser`.
  */
 export function referenciaArticulaciones(): string {
-  return [
+  const lineas = [
     "# Articulaciones de Posecode",
     "",
     "Referencia generada automáticamente desde `posecode-parser` (no editar a mano: se regenera con `pnpm test -- -u`). Muestra cada articulación de Posecode, las acciones que acepta y el rango de cada acción, en grados.",
@@ -86,5 +86,7 @@ export function referenciaArticulaciones(): string {
     "Cada hueso del rig por separado: los huesos con lado (`knee_left`, `knee_right`, …) y los del eje central (`pelvis`, `spine`, `chest`, `neck`, `head`).",
     "",
     tablaMarkdown(BONES.flatMap(filasDeHueso)),
-  ].join("\n");
+  ];
+  // El salto de línea final evita `\ No newline at end of file` en el snapshot.
+  return lineas.join("\n") + "\n";
 }
