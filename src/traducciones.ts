@@ -4,8 +4,9 @@ import { ACTION_NAMES, BONES, JOINT_GROUP_NAMES } from "posecode-parser";
  * Diccionario español → Posecode: ayuda al agente a traducir pedidos en
  * español ("flexioná las rodillas") al vocabulario de `posecode-parser`.
  *
- * - `ARTICULACIONES_ES` cubre cada grupo de `JOINT_GROUP_NAMES` (más los
- *   huesos axiales sin lado, como `spine` → `columna`).
+ * - `ARTICULACIONES_ES` cubre cada valor de `JOINT_GROUP_NAMES`.
+ *   Los huesos axiales (`spine`, `pelvis`, etc.) no son grupos de
+ *   articulaciones y no entran en el diccionario.
  * - `ACCIONES_ES` cubre cada valor de `ACTION_NAMES` con su verbo en español.
  * - `aPosecode` busca un término en los dos diccionarios, ignorando
  *   mayúsculas y tildes.
@@ -30,12 +31,6 @@ export const ARTICULACIONES_ES: Record<string, string> = {
   fingers: "dedos",
   fingers_left: "dedos izquierdos",
   fingers_right: "dedos derechos",
-  // Huesos axiales sin lado (JOINT_NAMES).
-  pelvis: "pelvis",
-  spine: "columna",
-  chest: "pecho",
-  neck: "cuello",
-  head: "cabeza",
 };
 
 export const ACCIONES_ES: Record<string, string> = {
