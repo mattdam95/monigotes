@@ -35,7 +35,9 @@ function puntajar(consulta: string, texto: string): number {
   const palabras = consulta.split(" ").filter(Boolean);
   const delTexto = new Set(texto.split(" ").filter(Boolean));
   const comunes = palabras.filter((p) => delTexto.has(p)).length;
-  return comunes * 5;
+  // Acotado por debajo de "contiene" (30) para que el orden de la spec
+  // (exacta > empieza con > contiene > palabras en común) siempre se mantenga.
+  return Math.min(comunes * 5, 25);
 }
 
 /**
