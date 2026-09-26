@@ -23,7 +23,7 @@ const CON_ANGULO_FUERA_DE_RANGO = `posecode exercise "Test"
 `;
 
 const sentadilla = readFileSync(
-  new URL("../../ejercicios/sentadilla.posecode", import.meta.url),
+  new URL("../ejercicios/sentadilla.posecode", import.meta.url),
   "utf8",
 );
 
