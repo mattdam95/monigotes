@@ -1,0 +1,15 @@
+posecode exercise "Elevación lateral"
+  rig humanoid
+  pose start = standing
+
+  step "Subir" 1.4s settle:
+    shoulders: abduct 90
+    elbows: flex 10
+    cue "Levantá el brazo hasta la altura del hombro, con el codo apenas doblado"
+
+  step "Bajar" 1.4s settle:
+    shoulders: abduct 0
+    elbows: flex 10
+    cue "Bajá con control, sin soltar el peso"
+
+  repeat 12
