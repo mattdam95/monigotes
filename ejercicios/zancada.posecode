@@ -1,0 +1,28 @@
+posecode exercise "Zancada"
+  rig humanoid
+  pose start = standing
+
+  step "Zancada" 1.6s flow:
+    hip_right: flex 45
+    knee_right: flex 95
+    hip_left: extend 15
+    knee_left: flex 80
+    ankle_left: plantarflex 30
+    spine: extend 4
+    travel: 0 0.3
+    pin: foot_left floor
+    reach: foot_right floor
+    cue "Dá un paso adelante y bajá la rodilla de atrás hacia el piso"
+
+  step "Subir" 1.4s settle:
+    hip_right: flex 0
+    knee_right: flex 0
+    hip_left: extend 0
+    knee_left: flex 0
+    ankle_left: plantarflex 0
+    spine: flex 0
+    travel: 0 0
+    ground-lock: feet
+    cue "Empujá con el talón de adelante para quedarte parado"
+
+  repeat 6
