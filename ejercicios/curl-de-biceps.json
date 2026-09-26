@@ -1,0 +1,13 @@
+{
+  "nombre": "Curl de bíceps",
+  "musculosPrincipales": ["bíceps"],
+  "musculosSecundarios": ["antebrazos"],
+  "equipo": ["mancuernas"],
+  "nivel": "principiante",
+  "instrucciones": [
+    "Parate erguido con una mancuerna en cada mano, palmas hacia adelante.",
+    "Mantené los codos pegados al costado del cuerpo.",
+    "Subí la mancuerna doblando solo los codos, sin balancear el brazo.",
+    "Bajá despacio hasta estirar casi por completo el brazo."
+  ]
+}
