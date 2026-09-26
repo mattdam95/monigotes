@@ -15,10 +15,15 @@ interface Fila {
 }
 
 /**
- * Rango de un grupo simétrico para una acción: intersección de los rangos de
- * sus huesos, para que el mismo ángulo pedido lo alcance cada hueso a la vez.
+ * Rango de un grupo simétrico para una acción: la intersección de los rangos
+ * de sus huesos (el máximo de los mínimos y el mínimo de los máximos), para
+ * que el mismo ángulo pedido lo alcance cada hueso a la vez. Devuelve null si
+ * algún hueso del grupo no define la acción.
+ *
+ * Exportado para que los tests comparen la fila de un grupo contra esta
+ * intersección calculada dinámicamente, no contra el ROM de un hueso aislado.
  */
-function rangoDeGrupo(
+export function rangoDeGrupo(
   grupo: string,
   accion: string,
 ): { min: number; max: number } | null {
@@ -77,7 +82,7 @@ export function referenciaArticulaciones(): string {
     "",
     "## Grupos simétricos",
     "",
-    "Los grupos mueven ambos lados del cuerpo a la vez. El rango de cada acción de un grupo es la intersección de los rangos de sus huesos: dentro de ese rango, el ángulo pedido lo alcanza cada hueso del grupo.",
+    "Los grupos mueven ambos lados del cuerpo a la vez. El rango de cada acción de un grupo es la intersección de los rangos de sus huesos (el máximo de los mínimos y el mínimo de los máximos): dentro de ese rango, el mismo ángulo pedido lo alcanza cada hueso del grupo a la vez.",
     "",
     tablaMarkdown(JOINT_GROUP_NAMES.flatMap(filasDeGrupo)),
     "",

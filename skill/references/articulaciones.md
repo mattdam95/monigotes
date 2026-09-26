@@ -4,7 +4,7 @@ Referencia generada automáticamente desde `posecode-parser` (no editar a mano: 
 
 ## Grupos simétricos
 
-Los grupos mueven ambos lados del cuerpo a la vez. El rango de cada acción de un grupo es la intersección de los rangos de sus huesos: dentro de ese rango, el ángulo pedido lo alcanza cada hueso del grupo.
+Los grupos mueven ambos lados del cuerpo a la vez. El rango de cada acción de un grupo es la intersección de los rangos de sus huesos (el máximo de los mínimos y el mínimo de los máximos): dentro de ese rango, el mismo ángulo pedido lo alcanza cada hueso del grupo a la vez.
 
 | Articulación | Acción | Mínimo | Máximo |
 | --- | --- | --- | --- |
