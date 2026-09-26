@@ -19,30 +19,61 @@ export interface EntradaIndice {
   duracionPasoSegundos: number;
 }
 
+/**
+ * Quita el comentario de la línea igual que el lexer del parser: `#...` o
+ * `//...` que no estén dentro de un string entre comillas.
+ */
+function sinComentario(linea: string): string {
+  let enString = false;
+  for (let i = 0; i < linea.length; i++) {
+    if (linea[i] === '"') enString = !enString;
+    if (enString) continue;
+    if (linea[i] === "#" || linea.startsWith("//", i)) {
+      return linea.slice(0, i);
+    }
+  }
+  return linea;
+}
+
 /** Suma de las duraciones de los pasos: la duración de una repetición. */
 function duracionTotal(ir: PosecodeIR): number {
   return ir.phases.reduce((total, fase) => total + fase.durationSec, 0);
 }
 
 /**
- * El IR solo expone `startPose` si el archivo la escribe; si no, se toma del
- * texto (y sin ninguna de las dos, la pose neutra es la que usa el parser).
+ * El IR expone `startPose` solo si el archivo la escribe, así que normalmente
+ * alcanza con el IR. La búsqueda en el texto usa la sintaxis exacta del
+ * parser (`pose start = <nombre>`, nombre con la regla de palabra de su
+ * lexer); sin `pose start` en el archivo, la pose neutra es la que usa el
+ * reproductor.
  */
+const LINEA_POSE_START =
+  /^[ \t]*pose[ \t]+start[ \t]+=[ \t]*([A-Za-z_][A-Za-z0-9_-]*)/;
+
 function poseInicial(ir: PosecodeIR, texto: string): string {
   if (ir.startPose) return ir.startPose;
-  const enTexto = /pose\s+start\s*=\s*([\p{L}-]+)/iu.exec(texto);
-  return enTexto ? enTexto[1] : "neutral";
+  for (const linea of texto.split(/\r?\n/)) {
+    const enTexto = LINEA_POSE_START.exec(sinComentario(linea));
+    if (enTexto) return enTexto[1];
+  }
+  return "neutral";
 }
 
 /**
- * El IR siempre trae `repeat` como número (1 por defecto), así que el IR solo
- * da el valor; el texto dice si el archivo la escribió de a propósito: una
- * línea cuyo primer token es `repeat` (con la indentación que tenga), seguida
- * de un entero positivo. Sin esa línea, no hay repeticiones.
+ * El IR siempre trae `repeat` como número (1 por defecto), así que el IR da
+ * el valor y el texto dice si el archivo la escribió. `parse()` devuelve
+ * `ir: null` si hay algún error, así que en un archivo que llega al índice,
+ * toda línea con la forma exacta de la declaración (dos tokens, `repeat` y
+ * un número, como exige el parser) es una declaración válida. Sin esa
+ * línea, no hay repeticiones.
  */
+const LINEA_REPEAT = /^[ \t]*repeat[ \t]+-?\d+(?:\.\d+)?[ \t]*$/;
+
 function repeticiones(ir: PosecodeIR, texto: string): number | null {
-  const escrita = /(?:^|\n)[ \t]*repeat[ \t]+\d+/.test(texto);
-  return escrita ? ir.repeat : null;
+  for (const linea of texto.split(/\r?\n/)) {
+    if (LINEA_REPEAT.test(sinComentario(linea))) return ir.repeat;
+  }
+  return null;
 }
 
 /** Entrada del índice para un `.posecode`; null si el archivo no parsea. */
