@@ -1,0 +1,15 @@
+posecode exercise "Elevación de talones"
+  rig humanoid
+  pose start = standing
+
+  step "Subir" 1.3s settle:
+    ankles: plantarflex 35
+    ground-lock: feet
+    cue "Apoyate en los antepies y levantá los talones"
+
+  step "Bajar" 1.5s settle:
+    ankles: plantarflex 0
+    ground-lock: feet
+    cue "Bajá los talones con control"
+
+  repeat 12
