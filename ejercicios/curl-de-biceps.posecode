@@ -1,0 +1,15 @@
+posecode exercise "Curl de bíceps"
+  rig humanoid
+  pose start = standing
+
+  step "Subir" 1.1s settle:
+    elbows: flex 135
+    forearms: pronate 0
+    cue "Subí la mancuerna sin despegar los codos del cuerpo"
+
+  step "Bajar" 1.4s settle:
+    elbows: flex 15
+    forearms: pronate 0
+    cue "Bajá con control, sin balancear"
+
+  repeat 10
