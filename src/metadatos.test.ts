@@ -1,5 +1,6 @@
 import { existsSync, readdirSync, readFileSync } from "node:fs";
 import { join } from "node:path";
+import { parse } from "posecode-parser";
 import { describe, expect, it } from "vitest";
 import { validarMetadatos } from "./metadatos.js";
 
@@ -156,10 +157,31 @@ describe("metadatos en ejercicios/", () => {
   });
 
   it.each(archivosJson.map((f) => [f] as const))(
+    "%s tiene un .posecode con el mismo id",
+    (archivo: string) => {
+      const id = archivo.slice(0, -".json".length);
+      expect(existsSync(join(DIR, `${id}.posecode`))).toBe(true);
+    },
+  );
+
+  it.each(archivosJson.map((f) => [f] as const))(
     "%s es válido según validarMetadatos",
     (archivo: string) => {
       const dato = JSON.parse(readFileSync(join(DIR, archivo), "utf8"));
       expect(validarMetadatos(dato)).toEqual([]);
+    },
+  );
+
+  it.each(archivosJson.map((f) => [f] as const))(
+    "%s: el nombre coincide con el de su .posecode",
+    (archivo: string) => {
+      const id = archivo.slice(0, -".json".length);
+      const dato = JSON.parse(readFileSync(join(DIR, archivo), "utf8")) as {
+        nombre: string;
+      };
+      const { ir } = parse(readFileSync(join(DIR, `${id}.posecode`), "utf8"));
+      expect(ir).not.toBeNull();
+      expect(ir?.name).toBe(dato.nombre);
     },
   );
 });
