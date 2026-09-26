@@ -1,0 +1,90 @@
+import {
+  ACTION_NAMES,
+  BONES,
+  JOINT_GROUP_NAMES,
+  actionsForJoint,
+  expandJoint,
+  romFor,
+} from "posecode-parser";
+
+interface Fila {
+  articulacion: string;
+  accion: string;
+  min: number;
+  max: number;
+}
+
+/**
+ * Rango de un grupo simétrico para una acción: intersección de los rangos de
+ * sus huesos, para que el mismo ángulo pedido lo alcance cada hueso a la vez.
+ */
+function rangoDeGrupo(
+  grupo: string,
+  accion: string,
+): { min: number; max: number } | null {
+  let min = -Infinity;
+  let max = Infinity;
+  for (const hueso of expandJoint(grupo)) {
+    const rom = romFor(hueso, accion);
+    if (rom === null) return null;
+    min = Math.max(min, rom.min);
+    max = Math.min(max, rom.max);
+  }
+  return { min, max };
+}
+
+function filasDeGrupo(grupo: string): Fila[] {
+  return actionsForJoint(grupo).flatMap((accion) => {
+    const rom = rangoDeGrupo(grupo, accion);
+    return rom === null
+      ? []
+      : [{ articulacion: grupo, accion, min: rom.min, max: rom.max }];
+  });
+}
+
+function filasDeHueso(hueso: string): Fila[] {
+  return ACTION_NAMES.flatMap((accion) => {
+    const rom = romFor(hueso, accion);
+    return rom === null
+      ? []
+      : [{ articulacion: hueso, accion, min: rom.min, max: rom.max }];
+  });
+}
+
+function tablaMarkdown(filas: Fila[]): string {
+  const lineas = [
+    "| Articulación | Acción | Mínimo | Máximo |",
+    "| --- | --- | --- | --- |",
+  ];
+  for (const fila of filas) {
+    lineas.push(
+      `| ${fila.articulacion} | ${fila.accion} | ${fila.min} | ${fila.max} |`,
+    );
+  }
+  return lineas.join("\n");
+}
+
+/**
+ * Genera `skill/references/articulaciones.md` (snapshot de archivo) con cada
+ * articulación de Posecode, las acciones que acepta y el rango de cada acción,
+ * todo leído de `posecode-parser`.
+ */
+export function referenciaArticulaciones(): string {
+  return [
+    "# Articulaciones de Posecode",
+    "",
+    "Referencia generada automáticamente desde `posecode-parser` (no editar a mano: se regenera con `pnpm test -- -u`). Muestra cada articulación de Posecode, las acciones que acepta y el rango de cada acción, en grados.",
+    "",
+    "## Grupos simétricos",
+    "",
+    "Los grupos mueven ambos lados del cuerpo a la vez. El rango de cada acción de un grupo es la intersección de los rangos de sus huesos: dentro de ese rango, el ángulo pedido lo alcanza cada hueso del grupo.",
+    "",
+    tablaMarkdown(JOINT_GROUP_NAMES.flatMap(filasDeGrupo)),
+    "",
+    "## Huesos",
+    "",
+    "Cada hueso del rig por separado: los huesos con lado (`knee_left`, `knee_right`, …) y los del eje central (`pelvis`, `spine`, `chest`, `neck`, `head`).",
+    "",
+    tablaMarkdown(BONES.flatMap(filasDeHueso)),
+  ].join("\n");
+}
