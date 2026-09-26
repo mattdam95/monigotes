@@ -35,11 +35,14 @@ function poseInicial(ir: PosecodeIR, texto: string): string {
 }
 
 /**
- * El IR siempre trae `repeat` como número (1 por defecto), así que el texto
- * dice si el ejercicio repite de a propósito: sin `repeat`, no hay repeticiones.
+ * El IR siempre trae `repeat` como número (1 por defecto), así que el IR solo
+ * da el valor; el texto dice si el archivo la escribió de a propósito: una
+ * línea cuyo primer token es `repeat` (con la indentación que tenga), seguida
+ * de un entero positivo. Sin esa línea, no hay repeticiones.
  */
 function repeticiones(ir: PosecodeIR, texto: string): number | null {
-  return /^\s*repeat\s+\d+/mu.test(texto) ? ir.repeat : null;
+  const escrita = /(?:^|\n)[ \t]*repeat[ \t]+\d+/.test(texto);
+  return escrita ? ir.repeat : null;
 }
 
 /** Entrada del índice para un `.posecode`; null si el archivo no parsea. */
