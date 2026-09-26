@@ -1,4 +1,4 @@
-import { BONES } from "posecode-parser";
+import { ACTION_NAMES, BONES, JOINT_GROUP_NAMES } from "posecode-parser";
 
 /**
  * Diccionario español → Posecode: ayuda al agente a traducir pedidos en
@@ -54,6 +54,29 @@ export const ACCIONES_ES: Record<string, string> = {
   plantarflex: "plantiflexionar",
   hinge: "bisagrear",
 };
+
+/**
+ * Comproba la cobertura de cada diccionario contra el vocabulario del parser:
+ * todo *valor* de `JOINT_GROUP_NAMES` / `ACTION_NAMES` (listas de nombres en
+ * inglés) debe tener una traducción. Falla al importar el módulo si alguna
+ * falta, para que el diccionario no se desincronice del parser.
+ */
+function verificarCobertura(
+  diccionario: Record<string, string>,
+  vocabulario: readonly string[],
+): void {
+  const faltantes = vocabulario.filter(
+    (nombre) => typeof diccionario[nombre] !== "string",
+  );
+  if (faltantes.length > 0) {
+    throw new Error(
+      `Diccionario incompleto: faltan traducciones para ${faltantes.join(", ")}`,
+    );
+  }
+}
+
+verificarCobertura(ARTICULACIONES_ES, JOINT_GROUP_NAMES);
+verificarCobertura(ACCIONES_ES, ACTION_NAMES);
 
 /**
  * Singular español → hueso base, solo para los grupos cuyo hueso tiene
