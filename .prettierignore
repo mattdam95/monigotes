@@ -1,1 +1,3 @@
 pnpm-lock.yaml
+# Generados por los tests (toMatchFileSnapshot): no se formatean a mano
+skill/references/
