@@ -28,7 +28,7 @@ function lista(valores: readonly string[]): string {
 
 /** Genera la referencia de sintaxis de Posecode (Markdown, en español). */
 export function referenciaSintaxis(): string {
-  return [
+  const lineas = [
     "# Referencia de sintaxis de Posecode",
     "",
     `Lenguaje de versión ${POSECODE_VERSION}. Vocabulario cerrado exportado por \`posecode-parser\`.`,
@@ -74,5 +74,6 @@ export function referenciaSintaxis(): string {
     "```",
     PLANTILLA_MINIMA,
     "```",
-  ].join("\n");
+  ];
+  return lineas.join("\n") + "\n";
 }
