@@ -1,0 +1,202 @@
+[
+  {
+    "id": "sentadilla",
+    "pedido": "Mostrame una sentadilla, que se note bien la bajada",
+    "esperado": {
+      "tipo": "exercise",
+      "poseInicial": "standing",
+      "articulacionesClave": ["hips", "knees", "ankles"],
+      "contactos": ["feet"]
+    }
+  },
+  {
+    "id": "sentadilla-sumo",
+    "pedido": "Mostrame una sentadilla sumo, con las piernas bien abiertas",
+    "esperado": {
+      "tipo": "exercise",
+      "poseInicial": "standing",
+      "articulacionesClave": ["hips", "knees"],
+      "contactos": ["feet"]
+    }
+  },
+  {
+    "id": "peso-muerto",
+    "pedido": "Quiero ver el peso muerto, con la espalda bien recta",
+    "esperado": {
+      "tipo": "exercise",
+      "poseInicial": "standing",
+      "articulacionesClave": ["pelvis", "hips", "knees", "shoulders"],
+      "contactos": ["feet"]
+    }
+  },
+  {
+    "id": "zancada",
+    "pedido": "Una zancada hacia adelante, por favor",
+    "esperado": {
+      "tipo": "exercise",
+      "poseInicial": "standing",
+      "articulacionesClave": ["hips", "knees"],
+      "contactos": ["feet"]
+    }
+  },
+  {
+    "id": "curl-de-biceps",
+    "pedido": "Mostrame el curl de bíceps, con mancuernas, que se vea la contracción",
+    "esperado": {
+      "tipo": "exercise",
+      "poseInicial": "standing",
+      "articulacionesClave": ["elbows", "forearms"],
+      "contactos": ["feet"]
+    }
+  },
+  {
+    "id": "elevacion-lateral",
+    "pedido": "Una elevación lateral de hombro, lenta y controlada",
+    "esperado": {
+      "tipo": "exercise",
+      "poseInicial": "standing",
+      "articulacionesClave": ["shoulders"],
+      "contactos": ["feet"]
+    }
+  },
+  {
+    "id": "remo-inclinado",
+    "pedido": "El remo inclinado, que el peso llegue a la cadera",
+    "esperado": {
+      "tipo": "exercise",
+      "poseInicial": "standing",
+      "articulacionesClave": ["pelvis", "shoulders", "elbows"],
+      "contactos": ["feet"]
+    }
+  },
+  {
+    "id": "elevacion-de-talones",
+    "pedido": "Una elevación de talones parado, para los gemelos",
+    "esperado": {
+      "tipo": "exercise",
+      "poseInicial": "standing",
+      "articulacionesClave": ["ankles"],
+      "contactos": ["feet"]
+    }
+  },
+  {
+    "id": "estiramiento-de-isquios",
+    "pedido": "Estírame la parte de atrás de la pierna, me quedó dura de tanto correr",
+    "esperado": {
+      "tipo": "stretch",
+      "poseInicial": "standing",
+      "articulacionesClave": ["spine", "hips", "knees"],
+      "contactos": ["feet"]
+    }
+  },
+  {
+    "id": "estiramiento-de-hombro",
+    "pedido": "Necesito estirar el hombro, se me apretó con el remo",
+    "esperado": {
+      "tipo": "stretch",
+      "poseInicial": "standing",
+      "articulacionesClave": ["shoulders", "neck"],
+      "contactos": ["feet"]
+    }
+  },
+  {
+    "id": "estiramiento-de-cuadriceps",
+    "pedido": "Mostrame cómo estirar el cuádriceps, sentado en el piso",
+    "esperado": {
+      "tipo": "stretch",
+      "poseInicial": "seated",
+      "articulacionesClave": ["hips", "knees", "ankles"],
+      "contactos": ["back"]
+    }
+  },
+  {
+    "id": "estiramiento-de-pectorales",
+    "pedido": "Un estiramiento de pectoral, me quedó apretado del press",
+    "esperado": {
+      "tipo": "stretch",
+      "poseInicial": "standing",
+      "articulacionesClave": ["shoulders", "elbows"],
+      "contactos": ["feet"]
+    }
+  },
+  {
+    "id": "plancha",
+    "pedido": "Una plancha, que aguante bien y sin hundir la cadera",
+    "esperado": {
+      "tipo": "posture",
+      "poseInicial": "plank",
+      "articulacionesClave": ["shoulders", "elbows", "hips"],
+      "contactos": ["forearms"]
+    }
+  },
+  {
+    "id": "postura-del-guerrero",
+    "pedido": "La postura del guerrero, del yoga, bien firme en las piernas",
+    "esperado": {
+      "tipo": "posture",
+      "poseInicial": "standing",
+      "articulacionesClave": ["hips", "knees", "ankles"],
+      "contactos": ["feet"]
+    }
+  },
+  {
+    "id": "perro-cabeza-abajo",
+    "pedido": "El perro con la cabeza abajo, estirando la espalda",
+    "esperado": {
+      "tipo": "posture",
+      "poseInicial": "prone",
+      "articulacionesClave": ["shoulders", "hips", "spine"],
+      "contactos": ["hands", "feet"]
+    }
+  },
+  {
+    "id": "flexiones-de-brazos",
+    "pedido": "Mostrame la flexión de brazos, con el cuerpo bien recto",
+    "esperado": {
+      "tipo": "exercise",
+      "poseInicial": "prone",
+      "articulacionesClave": ["shoulders", "elbows"],
+      "contactos": ["hands"]
+    }
+  },
+  {
+    "id": "crunch-abdominal",
+    "pedido": "Un crunch abdominal, sin tirar del cuello",
+    "esperado": {
+      "tipo": "exercise",
+      "poseInicial": "supine",
+      "articulacionesClave": ["spine", "hips"],
+      "contactos": ["back", "feet"]
+    }
+  },
+  {
+    "id": "elevacion-de-piernas",
+    "pedido": "Elevación de piernas acostado, para el bajo del abdomen",
+    "esperado": {
+      "tipo": "exercise",
+      "poseInicial": "supine",
+      "articulacionesClave": ["hips", "knees", "ankles"],
+      "contactos": ["back"]
+    }
+  },
+  {
+    "id": "mountain-climbers",
+    "pedido": "Los mountain climbers, en plancha, moviendo las rodillas",
+    "esperado": {
+      "tipo": "exercise",
+      "poseInicial": "plank",
+      "articulacionesClave": ["hips", "knees", "shoulders"],
+      "contactos": ["hands"]
+    }
+  },
+  {
+    "id": "abdominal-bicicleta",
+    "pedido": "Los abdominales bicicleta, para el core, bien lentos",
+    "esperado": {
+      "tipo": "exercise",
+      "poseInicial": "supine",
+      "articulacionesClave": ["spine", "hips", "shoulders"],
+      "contactos": ["back"]
+    }
+  }
+]
