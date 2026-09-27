@@ -81,25 +81,31 @@ describe("validarTexto", () => {
 
   it("explica en español los errores del parser, sin traducir el mensaje original", () => {
     // El parser expone mensajes internos en inglés (p. ej.
-    // 'unknown joint: "rodillas"'): no son un contrato estable, así que se
-    // conservan tal cual y se les anteponen contexto en español rioplatense.
+    // `unknown joint: "rodillas"`, aunque el formato puede variar entre
+    // versiones): no son un contrato estable, así que se conservan tal cual
+    // y se les anteponen contexto en español rioplatense. Por eso el test no
+    // hardcodea el formato interno: verifica el prefijo en español y que se
+    // mencione la articulación problemática.
     const resultado = validarTexto(CON_ARTICULACION_INEXISTENTE);
     expect(resultado.errores.length).toBeGreaterThan(0);
     for (const p of resultado.errores) {
-      expect(p.mensaje).toBe(`El parser reportó: unknown joint: "rodillas"`);
+      expect(p.mensaje.startsWith("El parser reportó: ")).toBe(true);
+      expect(p.mensaje).toContain("rodillas");
     }
   });
 
   it("describe el ángulo fuera de rango mencionando `knees`, `flex` y `300`", () => {
+    // El parser emite un aviso por cada hueso del grupo (`knee_left` y
+    // `knee_right` para `knees`), y la implementación mapea cada hueso de
+    // vuelta al nombre del grupo que escribió el autor, así que CADA aviso
+    // debe mencionar `knees`, `flex` y `300`.
     const resultado = validarTexto(CON_ANGULO_FUERA_DE_RANGO);
     if (resultado.avisos.length > 0) {
-      const completo = resultado.avisos.some(
-        (a) =>
-          a.mensaje.includes("knees") &&
-          a.mensaje.includes("flex") &&
-          a.mensaje.includes("300"),
-      );
-      expect(completo).toBe(true);
+      for (const a of resultado.avisos) {
+        expect(a.mensaje).toContain("knees");
+        expect(a.mensaje).toContain("flex");
+        expect(a.mensaje).toContain("300");
+      }
     } else {
       expect(resultado.errores.length).toBeGreaterThan(0);
       expect(resultado.errores.some((e) => typeof e.linea === "number")).toBe(
