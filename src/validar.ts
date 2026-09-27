@@ -1,4 +1,10 @@
-import { parse, type ParseError, type Warning } from "posecode-parser";
+import {
+  expandJoint,
+  JOINT_GROUP_NAMES,
+  parse,
+  type ParseError,
+  type Warning,
+} from "posecode-parser";
 
 /** Un problema (error o aviso) con información lista para mostrar. */
 export interface Problema {
@@ -47,11 +53,45 @@ export function formatearProblemas(r: ResultadoValidacion): string {
   return lineas.length === 0 ? "sin problemas" : lineas.join("\n");
 }
 
+/**
+ * Convierte un `ParseError` en un problema. El tipo solo trae `{ line,
+ * message }` (sin campo de código), así que `codigo` se deja `null`.
+ * El mensaje del parser es interno y en inglés, y no es un contrato
+ * estable, así que se conserva tal cual y se le anteponen contexto en
+ * español rioplatense en vez de traducirlo.
+ */
 function problemaDeError(e: ParseError): Problema {
-  return { linea: e.line, codigo: null, mensaje: e.message };
+  return {
+    linea: e.line,
+    codigo: null,
+    mensaje: `El parser reportó: ${e.message}`,
+  };
 }
 
+/**
+ * Convierte un `Warning` en un problema. El tipo solo trae `{ line, phase,
+ * joint, action, requested, clamped, limit }` (sin campo de código), así
+ * que `codigo` se deja `null`.
+ */
 function problemaDeAviso(w: Warning): Problema {
-  const mensaje = `${w.joint} ${w.action} ${w.requested}° fuera de rango (${w.limit.min}° a ${w.limit.max}°): se limita a ${w.clamped}°`;
+  const mensaje = `${nombreDeArticulacion(w.joint)} ${w.action} ${w.requested}° fuera de rango (${w.limit.min}° a ${w.limit.max}°): se limita a ${w.clamped}°`;
   return { linea: w.line, codigo: null, mensaje };
+}
+
+/**
+ * El parser expande los grupos simétricos al emitir avisos (p. ej.
+ * `knees` → avisos por `knee_left` y `knee_right`), así que el campo
+ * `joint` trae el nombre del hueso. Si el hueso pertenece a un grupo
+ * simétrico, se devuelve el nombre del grupo (el que escribió el autor);
+ * si no, el nombre del hueso tal cual. `expandJoint` y `JOINT_GROUP_NAMES`
+ * son exports públicos verificados en la versión instalada de
+ * `posecode-parser` (`node_modules/posecode-parser/dist/index.d.ts`).
+ */
+function nombreDeArticulacion(bone: string): string {
+  for (const grupo of JOINT_GROUP_NAMES) {
+    if (expandJoint(grupo).includes(bone)) {
+      return grupo;
+    }
+  }
+  return bone;
 }
