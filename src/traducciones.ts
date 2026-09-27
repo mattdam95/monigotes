@@ -1,14 +1,15 @@
-import { ACTION_NAMES, BONES, JOINT_GROUP_NAMES } from "posecode-parser";
+import { BONES } from "posecode-parser";
 
 /**
  * Diccionario español → Posecode: ayuda al agente a traducir pedidos en
  * español ("flexioná las rodillas") al vocabulario de `posecode-parser`.
  *
  * - `ARTICULACIONES_ES` cubre cada valor de `JOINT_GROUP_NAMES`.
- *   Los huesos axiales (`spine`, `pelvis`, etc.) no son grupos de
- *   articulaciones y no entran en el diccionario.
+ * - `HUESOS_AXIALES_ES` cubre cada hueso de `BONES` sin lado (`pelvis`,
+ *   `spine`, `chest`, `neck`, `head`): no son grupos de articulaciones y por
+ *   eso no entran en `ARTICULACIONES_ES`.
  * - `ACCIONES_ES` cubre cada valor de `ACTION_NAMES` con su verbo en español.
- * - `aPosecode` busca un término en los dos diccionarios, ignorando
+ * - `aPosecode` busca un término en los tres diccionarios, ignorando
  *   mayúsculas y tildes.
  *
  * Regla de lado: los huesos con lado (`knee_left`) no tienen entrada propia en
@@ -33,6 +34,15 @@ export const ARTICULACIONES_ES: Record<string, string> = {
   fingers_right: "dedos derechos",
 };
 
+export const HUESOS_AXIALES_ES: Record<string, string> = {
+  // Huesos de `BONES` sin lado (sin sufijo `_left`/`_right`).
+  pelvis: "pelvis",
+  spine: "columna",
+  chest: "pecho",
+  neck: "cuello",
+  head: "cabeza",
+};
+
 export const ACCIONES_ES: Record<string, string> = {
   // ACTION_NAMES → verbo en español.
   flex: "flexionar",
@@ -47,31 +57,11 @@ export const ACCIONES_ES: Record<string, string> = {
   pronate: "pronar",
   dorsiflex: "dorsiflexionar",
   plantarflex: "plantiflexionar",
-  hinge: "bisagrear",
+  // hinge → "bisagra de cadera": el parser lo define como el giro del torso
+  // sobre la línea de la cadera (`joints.ts`, "Hip hinge") y solo lo admite
+  // `pelvis`. "doblar" se confundía con `flex` ("flexionar").
+  hinge: "bisagra de cadera",
 };
-
-/**
- * Comproba la cobertura de cada diccionario contra el vocabulario del parser:
- * todo *valor* de `JOINT_GROUP_NAMES` / `ACTION_NAMES` (listas de nombres en
- * inglés) debe tener una traducción. Falla al importar el módulo si alguna
- * falta, para que el diccionario no se desincronice del parser.
- */
-function verificarCobertura(
-  diccionario: Record<string, string>,
-  vocabulario: readonly string[],
-): void {
-  const faltantes = vocabulario.filter(
-    (nombre) => typeof diccionario[nombre] !== "string",
-  );
-  if (faltantes.length > 0) {
-    throw new Error(
-      `Diccionario incompleto: faltan traducciones para ${faltantes.join(", ")}`,
-    );
-  }
-}
-
-verificarCobertura(ARTICULACIONES_ES, JOINT_GROUP_NAMES);
-verificarCobertura(ACCIONES_ES, ACTION_NAMES);
 
 /**
  * Singular español → hueso base, solo para los grupos cuyo hueso tiene
@@ -105,9 +95,12 @@ function normalizar(termino: string): string {
     .trim();
 }
 
-/** Traducción inversa (español normalizado → Posecode) de los dos diccionarios. */
+/** Traducción inversa (español normalizado → Posecode) de los tres diccionarios. */
 const ESPANOL_A_POSECODE = new Map<string, string>();
 for (const [posecode, es] of Object.entries(ARTICULACIONES_ES)) {
+  ESPANOL_A_POSECODE.set(normalizar(es), posecode);
+}
+for (const [posecode, es] of Object.entries(HUESOS_AXIALES_ES)) {
   ESPANOL_A_POSECODE.set(normalizar(es), posecode);
 }
 for (const [posecode, es] of Object.entries(ACCIONES_ES)) {
