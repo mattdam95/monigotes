@@ -61,6 +61,8 @@ export function validarMetadatos(dato: unknown): string[] {
 
   if (!estaFalta(dato, "nombre") && !esTexto(dato.nombre)) {
     problemas.push("nombre debe ser un texto.");
+  } else if (esTexto(dato.nombre) && dato.nombre.trim() === "") {
+    problemas.push("nombre no puede estar vacío ni ser solo espacios.");
   }
 
   if (
@@ -81,6 +83,12 @@ export function validarMetadatos(dato: unknown): string[] {
     const valor: unknown = dato[lista];
     if (!esLista(valor)) {
       problemas.push(`${lista} debe ser una lista.`);
+      continue;
+    }
+    if (lista === "musculosPrincipales" && valor.length === 0) {
+      problemas.push(
+        "musculosPrincipales debe tener al menos un músculo principal.",
+      );
       continue;
     }
     const elementos: string[] = valor.filter((e) => esTexto(e));

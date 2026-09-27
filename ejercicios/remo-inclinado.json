@@ -1,0 +1,13 @@
+{
+  "nombre": "Remo inclinado",
+  "musculosPrincipales": ["dorsales", "espalda alta"],
+  "musculosSecundarios": ["bíceps", "core"],
+  "equipo": ["barra"],
+  "nivel": "intermedio",
+  "instrucciones": [
+    "Incliná el torso hacia adelante con la espalda recta y las rodillas levemente flexionadas.",
+    "Dejá que los brazos cuelguen estirados, con la barra por delante de las rodillas.",
+    "Llevá los codos hacia arriba pasando las costillas y apretá los omóplatos.",
+    "Bajá la barra con control, sin redondear la espalda."
+  ]
+}

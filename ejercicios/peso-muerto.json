@@ -1,0 +1,13 @@
+{
+  "nombre": "Peso muerto",
+  "musculosPrincipales": ["isquiotibiales", "glúteos"],
+  "musculosSecundarios": ["cuádriceps", "core"],
+  "equipo": ["barra"],
+  "nivel": "intermedio",
+  "instrucciones": [
+    "Pará con la barra sobre los antepies, cerca de las piernas.",
+    "Agarrá la barra, mantené la espalda recta y bajá la cadera hacia atrás.",
+    "Llevá los brazos estirados por debajo de los hombros hasta casi el piso.",
+    "Empujá la cadera hacia adelante y volvé a quedarte erguido sin balancear la espalda."
+  ]
+}

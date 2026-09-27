@@ -1,0 +1,13 @@
+{
+  "nombre": "Zancada",
+  "musculosPrincipales": ["cuádriceps", "glúteos"],
+  "musculosSecundarios": ["isquiotibiales", "core"],
+  "equipo": [],
+  "nivel": "principiante",
+  "instrucciones": [
+    "Pará con los pies juntos y dá un paso largo hacia adelante.",
+    "Bajá llevando la rodilla de atrás casi hasta el piso, con la de adelante flexionada a 90 grados.",
+    "Mantené la espalda erguida y el peso sobre el talón de adelante.",
+    "Empujá con el talón de adelante para quedarte de pie y cambiá de pierna."
+  ]
+}
