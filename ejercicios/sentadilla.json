@@ -1,0 +1,13 @@
+{
+  "nombre": "Sentadilla",
+  "musculosPrincipales": ["cuádriceps", "glúteos"],
+  "musculosSecundarios": ["isquiotibiales", "core"],
+  "equipo": [],
+  "nivel": "principiante",
+  "instrucciones": [
+    "Pies al ancho de los hombros, con las puntas levemente hacia afuera.",
+    "Bajá llevando la cadera hacia atrás, con el pecho erguido.",
+    "Bajá hasta que los muslos queden casi paralelos al piso, sin despegar los talones.",
+    "Empujá con los talones para volver a quedarte de pie."
+  ]
+}
