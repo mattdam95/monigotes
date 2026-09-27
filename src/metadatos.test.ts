@@ -169,6 +169,19 @@ describe("validarMetadatos", () => {
   });
 });
 
+/**
+ * Normaliza el nombre de un ejercicio para compararlo con el id del archivo:
+ * minúsculas, sin acentos y espacios convertidos a guiones.
+ */
+function normalizarId(valor: string): string {
+  return valor
+    .normalize("NFD")
+    .replace(/\p{Diacritic}/gu, "")
+    .toLowerCase()
+    .trim()
+    .replace(/\s+/g, "-");
+}
+
 describe("metadatos en ejercicios/", () => {
   const archivosJson = readdirSync(DIR)
     .filter((f) => f.endsWith(".json"))
@@ -181,7 +194,15 @@ describe("metadatos en ejercicios/", () => {
     "todo .posecode tiene su .json con el mismo id: %s",
     (archivo: string) => {
       const id = archivo.slice(0, -".posecode".length);
-      expect(existsSync(join(DIR, `${id}.json`))).toBe(true);
+      const rutaJson = join(DIR, `${id}.json`);
+      expect(existsSync(rutaJson)).toBe(true);
+      const dato = JSON.parse(readFileSync(rutaJson, "utf8")) as {
+        id?: string;
+        slug?: string;
+        nombre: string;
+      };
+      const identificador: string = dato.id ?? dato.slug ?? dato.nombre;
+      expect(normalizarId(identificador)).toBe(id);
     },
   );
 
