@@ -57,6 +57,7 @@ export const ACCIONES_ES: Record<string, string> = {
   pronate: "pronar",
   dorsiflex: "dorsiflexionar",
   plantarflex: "plantiflexionar",
+  // hinge → "doblar": redacción natural, queda a verificar por el usuario.
   hinge: "doblar",
 };
 
