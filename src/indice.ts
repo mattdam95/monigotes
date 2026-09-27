@@ -34,11 +34,12 @@ function duracionTotal(ir: PosecodeIR): number {
 }
 
 /**
- * El IR expone `startPose` solo si el archivo la escribe, así que normalmente
- * alcanza con el IR. La búsqueda en el texto usa la sintaxis exacta del
- * parser (`pose start = <nombre>`, nombre con la regla de palabra de su
- * lexer); sin `pose start` en el archivo, la pose neutra es la que usa el
- * reproductor.
+ * El IR expone `startPose` solo si el archivo la escribe (el schema la deja
+ * opcional), así que normalmente alcanza con el IR; la búsqueda en el texto
+ * usa la sintaxis exacta del parser (`pose start = <nombre>`, nombre con la
+ * regla de palabra de su lexer). Sin `pose start` en el archivo el parser no
+ * expone pose inicial: el índice reporta "neutral" como convención propia
+ * (el README del parser no define una pose por defecto).
  */
 const LINEA_POSE_START =
   /^[ \t]*pose[ \t]+start[ \t]+=[ \t]*([A-Za-z_][A-Za-z0-9_-]*)/;
@@ -91,10 +92,10 @@ function entradaPara(id: string, texto: string): EntradaIndice | null {
 export function indiceCatalogo(dir: string): EntradaIndice[] {
   return readdirSync(dir)
     .filter((f) => f.endsWith(".posecode"))
-    .sort()
     .map((archivo) => {
       const id = archivo.slice(0, -".posecode".length);
       return entradaPara(id, readFileSync(join(dir, archivo), "utf8"));
     })
-    .filter((entrada): entrada is EntradaIndice => entrada !== null);
+    .filter((entrada): entrada is EntradaIndice => entrada !== null)
+    .sort((a, b) => (a.id < b.id ? -1 : a.id > b.id ? 1 : 0));
 }
