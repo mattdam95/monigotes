@@ -2,7 +2,7 @@ posecode exercise "Ejercicio roto"
   rig humanoid
   pose start = standing
 
-  step "Subir" 1.0s settle
+  step "Subir" 1.0s settle:
     shinbones: flex 90
     cue "Esta articulación no existe en el parser"
 

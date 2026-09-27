@@ -13,8 +13,9 @@ export interface EntradaIndice {
 }
 
 /**
- * Quita el comentario de la línea igual que el lexer del parser: `#...` o
- * `//...` que no estén dentro de un string entre comillas.
+ * Quita el comentario de la línea con el mismo algoritmo que `stripComment`
+ * del lexer del parser (`dist/tokenizer.js`): corta en el primer `#` o `//`
+ * que no esté dentro de un string entre comillas.
  */
 function sinComentario(linea: string): string {
   let enString = false;
@@ -34,12 +35,14 @@ function duracionTotal(ir: PosecodeIR): number {
 }
 
 /**
- * El IR expone `startPose` solo si el archivo la escribe (el schema la deja
- * opcional), así que normalmente alcanza con el IR; la búsqueda en el texto
- * usa la sintaxis exacta del parser (`pose start = <nombre>`, nombre con la
- * regla de palabra de su lexer). Sin `pose start` en el archivo el parser no
- * expone pose inicial: el índice reporta "neutral" como convención propia
- * (el README del parser no define una pose por defecto).
+ * El IR expone `startPose` solo si el archivo la escribe: el schema la deja
+ * opcional y un nombre inválido ya devuelve `ir: null`, así que para un
+ * archivo que llega aquí el IR trae la pose si está escrita y la búsqueda en
+ * el texto (sintaxis exacta del parser: `pose start = <nombre>`, palabra
+ * según la regla del lexer) es una defensa extra. Verificado contra el
+ * parser: sin `pose start` el IR deja `startPose` en `undefined` (el README
+ * no define pose por defecto), así que el índice reporta "neutral" como
+ * convención propia.
  */
 const LINEA_POSE_START =
   /^[ \t]*pose[ \t]+start[ \t]+=[ \t]*([A-Za-z_][A-Za-z0-9_-]*)/;
