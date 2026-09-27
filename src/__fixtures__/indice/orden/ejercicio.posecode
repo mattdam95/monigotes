@@ -1,0 +1,12 @@
+posecode exercise "Ejercicio"
+  rig humanoid
+
+  step "Subir" 1.0s settle:
+    shoulders: flex 60
+    cue "Levantá los hombros despacio"
+
+  step "Bajar" 1.0s settle:
+    shoulders: flex 0
+    cue "Bajá los hombros controlando"
+
+  repeat 4

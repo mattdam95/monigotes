@@ -1,0 +1,12 @@
+posecode exercise "Ejercicio extra"
+  rig humanoid
+
+  step "Doblar" 0.8s drive:
+    elbows: flex 90
+    cue "Doblá los codos"
+
+  step "Extender" 0.8s settle:
+    elbows: flex 0
+    cue "Volvé a extender los brazos"
+
+  repeat 5
