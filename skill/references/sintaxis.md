@@ -54,7 +54,7 @@ Apoyos en el piso (`ground-lock`):
 - `foot_right`
 - `back`
 
-Puntos fijos que traslanzan el cuerpo a un anclaje (`pin`):
+Puntos fijos que trasladan el cuerpo a un anclaje (`pin`):
 
 - `hands`
 - `fists`
@@ -73,7 +73,7 @@ Puntos fijos que traslanzan el cuerpo a un anclaje (`pin`):
 - `foot_right`
 - `pelvis`
 
-Effectores que se llevan a un punto por IK (`reach`):
+Efectores que se llevan a un punto por IK (`reach`):
 
 - `hands`
 - `fists`
