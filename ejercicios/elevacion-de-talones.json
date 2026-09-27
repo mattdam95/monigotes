@@ -1,0 +1,13 @@
+{
+  "nombre": "Elevación de talones",
+  "musculosPrincipales": ["gemelos"],
+  "musculosSecundarios": ["sóleo"],
+  "equipo": ["mancuernas"],
+  "nivel": "principiante",
+  "instrucciones": [
+    "Parate erguido con los pies al ancho de la cadera.",
+    "Apoyate en los antepies y levantá los talones todo lo que puedas.",
+    "Mantené un segundo arriba, con los pies bien estirados.",
+    "Bajá los talones con control hasta que queden por debajo del piso."
+  ]
+}

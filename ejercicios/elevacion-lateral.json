@@ -1,0 +1,13 @@
+{
+  "nombre": "Elevación lateral",
+  "musculosPrincipales": ["deltoides"],
+  "musculosSecundarios": ["trapecios"],
+  "equipo": ["mancuernas"],
+  "nivel": "principiante",
+  "instrucciones": [
+    "Parate erguido con una mancuerna en cada mano, al costado del cuerpo.",
+    "Subí los brazos hasta la altura del hombro, con los codos apenas doblados.",
+    "No pases de la altura del hombro ni uses impulso.",
+    "Bajá con control hasta el costado del cuerpo."
+  ]
+}

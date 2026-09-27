@@ -139,12 +139,63 @@ describe("validarMetadatos", () => {
       },
     );
   });
+
+  describe("nombre vacío o de solo espacios", () => {
+    it.each(["", "   ", " \t\n "] as const)(
+      "reporta con un mensaje que nombra el campo cuando nombre es %j",
+      (nombre: string) => {
+        const problemas = validarMetadatos({ ...base, nombre });
+        expect(problemas.length).toBeGreaterThan(0);
+        expect(problemas.join(" ")).toContain("nombre");
+      },
+    );
+  });
+
+  describe("musculosPrincipales", () => {
+    it("reporta cuando la lista está vacía (debe tener al menos un músculo)", () => {
+      const problemas = validarMetadatos({
+        ...base,
+        musculosPrincipales: [],
+      });
+      expect(problemas.length).toBeGreaterThan(0);
+      expect(problemas.join(" ")).toContain("musculosPrincipales");
+    });
+
+    it("acepta musculosSecundarios y equipo vacíos", () => {
+      expect(
+        validarMetadatos({ ...base, musculosSecundarios: [], equipo: [] }),
+      ).toEqual([]);
+    });
+  });
 });
 
 describe("metadatos en ejercicios/", () => {
   const archivosJson = readdirSync(DIR)
     .filter((f) => f.endsWith(".json"))
     .sort();
+  const archivosPosecode = readdirSync(DIR)
+    .filter((f) => f.endsWith(".posecode"))
+    .sort();
+
+  it.each(archivosPosecode.map((f) => [f] as const))(
+    "todo .posecode tiene su .json con el mismo id: %s",
+    (archivo: string) => {
+      const id = archivo.slice(0, -".posecode".length);
+      expect(existsSync(join(DIR, `${id}.json`))).toBe(true);
+    },
+  );
+
+  it("existen los .json de los ejercicios de las PRs #2 y #27 a #30", () => {
+    for (const id of [
+      "elevacion-de-talones",
+      "elevacion-lateral",
+      "peso-muerto",
+      "remo-inclinado",
+      "zancada",
+    ]) {
+      expect(existsSync(join(DIR, `${id}.json`))).toBe(true);
+    }
+  });
 
   it("existe al menos un .json", () => {
     expect(archivosJson.length).toBeGreaterThan(0);
