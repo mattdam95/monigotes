@@ -2,9 +2,12 @@ import { describe, expect, it } from "vitest";
 import { indiceCatalogo, type EntradaIndice } from "./indice.js";
 
 const dirFixtures = new URL("./__fixtures__/indice", import.meta.url).pathname;
+const dirOrden = new URL("./__fixtures__/indice/orden", import.meta.url)
+  .pathname;
 const dirEjercicios = new URL("../ejercicios", import.meta.url).pathname;
 
 const IDs_ORDENADOS = ["estiramiento-hombro", "sentadilla-peso-libre"];
+const IDs_ORDEN = ["ejercicio", "ejercicio-extra"];
 
 function entradaPorId(entradas: EntradaIndice[], id: string): EntradaIndice {
   const entrada = entradas.find((e) => e.id === id);
@@ -16,11 +19,9 @@ describe("índice del catálogo", () => {
   describe("con los fixtures de src/__fixtures__/indice", () => {
     const entradas = indiceCatalogo(dirFixtures);
 
-    it("tiene 2 entradas ordenadas por id y no aparece el archivo inválido", () => {
+    it("tiene exactamente 2 entradas ordenadas por id y omite el archivo que no parsea", () => {
       expect(entradas.map((e) => e.id)).toEqual(IDs_ORDENADOS);
-      expect(entradas.map((e) => e.id)).not.toContain(
-        "roto-artinulacion-invalida",
-      );
+      expect(entradas.length).toBe(2);
     });
 
     it("duracionPasoSegundos de sentadilla-peso-libre (1.6s + 1.2s) es 2.8, con tolerancia de 0.01", () => {
@@ -56,6 +57,20 @@ describe("índice del catálogo", () => {
         expect(entrada.poseInicial).toBe(esperado.poseInicial);
         expect(entrada.pasos).toEqual(esperado.pasos);
         expect(entrada.repeticiones).toBe(esperado.repeticiones);
+      }
+    });
+  });
+
+  describe("orden por id con los fixtures de src/__fixtures__/indice/orden", () => {
+    const entradas = indiceCatalogo(dirOrden);
+
+    it("ordena por id (sin la extensión): ejercicio antes que ejercicio-extra", () => {
+      expect(entradas.map((e) => e.id)).toEqual(IDs_ORDEN);
+    });
+
+    it("sin pose start en el archivo, poseInicial es neutral", () => {
+      for (const entrada of entradas) {
+        expect(entrada.poseInicial).toBe("neutral");
       }
     });
   });
