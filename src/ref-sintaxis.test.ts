@@ -109,7 +109,7 @@ describe("referencia de sintaxis de Posecode", () => {
 
 /** Extrae la línea de descripción de un contacto (`pin` o `reach`). */
 function lineaDescripcion(texto: string, contacto: "pin" | "reach"): string {
-  const linea = texto.split("\n").find((l) => l.includes(`(${contacto}):`));
+  const linea = texto.split("\n").find((l) => l.includes(`(\`${contacto}\`):`));
   if (!linea) {
     throw new Error(`no se encontró la descripción de \`${contacto}\``);
   }
