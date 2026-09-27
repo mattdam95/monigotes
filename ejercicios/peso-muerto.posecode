@@ -1,0 +1,25 @@
+posecode exercise "Peso muerto"
+  rig humanoid
+  pose start = standing
+
+  step "Bajar" 1.8s flow:
+    pelvis: hinge 75
+    knees: flex 14
+    ankles: plantarflex 0
+    shoulders: flex 70
+    elbows: pronate 80
+    neck: extend 12
+    ground-lock: feet
+    cue "Llevá la cadera hacia atrás, con la espalda recta, y dejá caer los brazos por debajo de los hombros"
+
+  step "Subir" 1.4s settle:
+    pelvis: hinge 0
+    knees: flex 0
+    ankles: plantarflex 0
+    shoulders: flex 0
+    elbows: pronate 80
+    neck: extend 0
+    ground-lock: feet
+    cue "Empujá la cadera hacia adelante y volvé a quedarte erguido"
+
+  repeat 8
