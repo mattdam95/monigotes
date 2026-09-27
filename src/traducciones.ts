@@ -57,8 +57,10 @@ export const ACCIONES_ES: Record<string, string> = {
   pronate: "pronar",
   dorsiflex: "dorsiflexionar",
   plantarflex: "plantiflexionar",
-  // hinge → "doblar": redacción natural, queda a verificar por el usuario.
-  hinge: "doblar",
+  // hinge → "bisagra de cadera": el parser lo define como el giro del torso
+  // sobre la línea de la cadera (`joints.ts`, "Hip hinge") y solo lo admite
+  // `pelvis`. "doblar" se confundía con `flex` ("flexionar").
+  hinge: "bisagra de cadera",
 };
 
 /**
