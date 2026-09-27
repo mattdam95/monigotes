@@ -1,3 +1,4 @@
+import { readFileSync } from "node:fs";
 import { describe, expect, it } from "vitest";
 import {
   VERSION_EMBED,
@@ -52,6 +53,32 @@ function urlsDe(html: string): string[] {
   return html.match(/https?:\/\/[^\s"'<>()]+/g) ?? [];
 }
 
+/** Captura el error que lanza `fn`; si no lanza, el test falla con un mensaje claro. */
+function errorAlLlamar(fn: () => string, etiqueta: string): Error {
+  try {
+    fn();
+  } catch (error) {
+    if (error instanceof Error) return error;
+    throw new Error(
+      `${etiqueta}: lanzó algo que no es un Error: ${String(error)}`,
+    );
+  }
+  throw new Error(
+    `${etiqueta}: se esperaba que fragmentoReproductor lanzara un error`,
+  );
+}
+
+/** Extrae el bloque de comentario JSDoc que precede a una función en la fuente. */
+function comentarioSobre(funcion: string, fuente: string): string {
+  const posicion = fuente.indexOf(`function ${funcion}`);
+  if (posicion === -1) return "";
+  const antes = fuente.slice(0, posicion);
+  const fin = antes.lastIndexOf("*/");
+  const inicio = antes.lastIndexOf("/**");
+  if (inicio === -1 || fin < inicio) return "";
+  return fuente.slice(inicio, fin + 2);
+}
+
 describe("scriptReproductor", () => {
   it("usa exactamente la versión VERSION_EMBED (0.5.0) y el host unpkg.com", () => {
     expect(VERSION_EMBED).toBe("0.5.0");
@@ -59,6 +86,15 @@ describe("scriptReproductor", () => {
     expect(script).toBe(`<script src="${URL_ESPERADA}"></script>`);
     expect(script).toContain("unpkg.com");
     expect(script).not.toContain("jsdelivr");
+  });
+
+  it("documenta en su comentario que el script viene de unpkg sin integrity y que la versión la fija VERSION_EMBED", () => {
+    const fuente = readFileSync(new URL("./embed.ts", import.meta.url), "utf8");
+    const comentario = comentarioSobre("scriptReproductor", fuente);
+    expect(comentario.length).toBeGreaterThan(0);
+    expect(comentario).toContain("unpkg");
+    expect(comentario).toContain("integrity");
+    expect(comentario).toContain("VERSION_EMBED");
   });
 });
 
@@ -126,5 +162,37 @@ describe("fragmentoReproductor", () => {
       expect(fragmento).not.toContain("posecode.org");
       expect(fragmento).not.toContain(".glb");
     }
+  });
+});
+
+describe("validación de alto en fragmentoReproductor", () => {
+  const ALTOS_INVALIDOS: ReadonlyArray<{ alto: number; etiqueta: string }> = [
+    { alto: NaN, etiqueta: "NaN" },
+    { alto: -5, etiqueta: "un negativo (-5)" },
+    { alto: 0, etiqueta: "0" },
+    { alto: Infinity, etiqueta: "Infinity" },
+  ];
+
+  it.each(ALTOS_INVALIDOS)(
+    "lanza un RangeError con mensaje en español si alto es $etiqueta",
+    ({ alto, etiqueta }) => {
+      const error = errorAlLlamar(
+        () => fragmentoReproductor(POSECODE_SIMPLE, { alto }),
+        `alto=${etiqueta}`,
+      );
+      expect(error, `alto=${etiqueta}`).toBeInstanceOf(RangeError);
+      expect(error.message, `alto=${etiqueta}`).toMatch(/alto|altura/i);
+    },
+  );
+
+  it("conserva un alto decimal (320.5) sin romper el atributo style", () => {
+    const html = fragmentoReproductor(POSECODE_SIMPLE, { alto: 320.5 });
+    expect(html).toContain('style="display:block;width:100%;height:320.5px"');
+    expect(html).toMatch(/height:320\.5px/);
+  });
+
+  it("un alto entero válido (320 por defecto) sigue generando el atributo completo", () => {
+    const html = fragmentoReproductor(POSECODE_SIMPLE);
+    expect(html).toContain('style="display:block;width:100%;height:320px"');
   });
 });
