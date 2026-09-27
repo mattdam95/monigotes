@@ -80,29 +80,22 @@ describe("validarTexto", () => {
   });
 
   it("explica en español los errores del parser, sin traducir el mensaje original", () => {
-    // El parser expone mensajes internos en inglés cuyo formato no es un
-    // contrato estable, así que se conservan tal cual y solo se les antepone
-    // un prefijo en español rioplatense que los contextualiza. El test
-    // verifica el prefijo, no el contenido del mensaje del parser.
+    // El parser expone mensajes internos en inglés (p. ej.
+    // 'unknown joint: "rodillas"'): no son un contrato estable, así que se
+    // conservan tal cual y se les anteponen contexto en español rioplatense.
     const resultado = validarTexto(CON_ARTICULACION_INEXISTENTE);
     expect(resultado.errores.length).toBeGreaterThan(0);
     for (const p of resultado.errores) {
-      expect(p.mensaje.startsWith("El parser reportó: ")).toBe(true);
+      expect(p.mensaje).toBe(`El parser reportó: unknown joint: "rodillas"`);
     }
   });
 
-  it("describe el ángulo fuera de rango, mencionando la articulación, la acción y el valor pedido", () => {
+  it("describe el ángulo fuera de rango mencionando `knees`, `flex` y `300`", () => {
     const resultado = validarTexto(CON_ANGULO_FUERA_DE_RANGO);
     if (resultado.avisos.length > 0) {
-      // El parser devuelve el aviso con el nombre del hueso (`knee_left` /
-      // `knee_right`); la implementación lo mapea al grupo (`knees`) cuando
-      // puede. El test acepta cualquier forma de la articulación sin depender
-      // de ese mapeo, y exige que figuren la acción y el valor pedido.
       const completo = resultado.avisos.some(
         (a) =>
-          (a.mensaje.includes("knees") ||
-            a.mensaje.includes("knee_left") ||
-            a.mensaje.includes("knee_right")) &&
+          a.mensaje.includes("knees") &&
           a.mensaje.includes("flex") &&
           a.mensaje.includes("300"),
       );
