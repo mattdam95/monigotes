@@ -83,7 +83,9 @@ function problemaDeAviso(w: Warning): Problema {
  * `knees` → avisos por `knee_left` y `knee_right`), así que el campo
  * `joint` trae el nombre del hueso. Si el hueso pertenece a un grupo
  * simétrico, se devuelve el nombre del grupo (el que escribió el autor);
- * si no, el nombre del hueso tal cual.
+ * si no, el nombre del hueso tal cual. `expandJoint` y `JOINT_GROUP_NAMES`
+ * son exports públicos verificados en la versión instalada de
+ * `posecode-parser` (`node_modules/posecode-parser/dist/index.d.ts`).
  */
 function nombreDeArticulacion(bone: string): string {
   for (const grupo of JOINT_GROUP_NAMES) {
