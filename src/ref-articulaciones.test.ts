@@ -1,12 +1,9 @@
 import { describe, expect, it } from "vitest";
+import { BONES, actionsForJoint, JOINT_GROUP_NAMES } from "posecode-parser";
 import {
-  BONES,
-  actionsForJoint,
-  expandJoint,
-  JOINT_GROUP_NAMES,
-  romFor,
-} from "posecode-parser";
-import { referenciaArticulaciones } from "./ref-articulaciones.js";
+  rangoDeGrupo,
+  referenciaArticulaciones,
+} from "./ref-articulaciones.js";
 
 /**
  * Celdas de todas las filas de datos de las tablas Markdown del documento
@@ -57,19 +54,14 @@ describe("referenciaArticulaciones", () => {
     expect(referenciaArticulaciones()).toContain(nombre);
   });
 
-  it("la fila knees/flex muestra el mínimo y máximo que devuelve el parser", () => {
+  it("la fila knees/flex muestra la intersección de rangos del grupo (rangoDeGrupo)", () => {
     expect(actionsForJoint("knees")).toContain("flex");
-    const texto = referenciaArticulaciones();
-    for (const hueso of expandJoint("knees")) {
-      const rom = romFor(hueso, "flex");
-      expect(rom, `rom para ${hueso}/flex`).not.toBeNull();
-      if (rom === null) continue;
-      const celdas = filaDe(texto, "knees", "flex");
-      expect(celdas, "fila knees/flex en la referencia").toBeDefined();
-      if (celdas === undefined) continue;
-      expect(celdas[2]).toBe(String(rom.min));
-      expect(celdas[3]).toBe(String(rom.max));
-    }
+    const rango = rangoDeGrupo("knees", "flex");
+    expect(rango, "rango de knees/flex").not.toBeNull();
+    const celdas = filaDe(referenciaArticulaciones(), "knees", "flex");
+    expect(celdas, "fila knees/flex en la referencia").toBeDefined();
+    expect(celdas![2]).toBe(String(rango!.min));
+    expect(celdas![3]).toBe(String(rango!.max));
   });
 
   it("no tiene filas duplicadas (misma articulación y acción)", () => {
