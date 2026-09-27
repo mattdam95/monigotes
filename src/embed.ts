@@ -2,7 +2,14 @@
 export const VERSION_EMBED = "0.5.0";
 
 export interface OpcionesReproductor {
-  /** Alto del reproductor en píxeles (por defecto 320). */
+  /**
+   * Alto del reproductor en píxeles (por defecto 320).
+   *
+   * Debe ser un número finito y mayor que 0 (por ejemplo 320 o 320.5);
+   * de lo contrario `fragmentoReproductor` lanza un `RangeError`. Se
+   * prefiere fallar a interpolar un `NaN`, negativo o `Infinity` en el
+   * atributo `style`, que rompería el HTML del artifact.
+   */
   alto?: number;
   /** Gira la cámara automáticamente (por defecto `false`). */
   autorotar?: boolean;
@@ -23,7 +30,12 @@ function escaparAtributo(texto: string): string {
   return escaparHtml(texto).replaceAll('"', "&quot;").replaceAll("'", "&#39;");
 }
 
-/** Script que carga el reproductor `posecode-embed` desde unpkg. */
+/**
+ * Script que carga el reproductor `posecode-embed` desde unpkg.
+ *
+ * El script viene de unpkg sin atributo `integrity` (no se calcula un
+ * hash SRI); la versión del bundle queda fijada por `VERSION_EMBED`.
+ */
 export function scriptReproductor(): string {
   return `<script src="https://unpkg.com/posecode-embed@${VERSION_EMBED}/dist/posecode-embed.js"></script>`;
 }
@@ -39,6 +51,11 @@ export function fragmentoReproductor(
   opciones: OpcionesReproductor = {},
 ): string {
   const { alto = 320, autorotar = false } = opciones;
+  if (!Number.isFinite(alto) || alto <= 0) {
+    throw new RangeError(
+      `alto debe ser un número finito y mayor que 0 (recibido: ${String(alto)})`,
+    );
+  }
   const atributos = [
     'character="off"',
     `autorotate="${autorotar ? "true" : "false"}"`,
