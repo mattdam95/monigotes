@@ -2,7 +2,7 @@
   "nombre": "Elevación de talones",
   "musculosPrincipales": ["gemelos"],
   "musculosSecundarios": ["sóleo"],
-  "equipo": [],
+  "equipo": ["mancuernas"],
   "nivel": "principiante",
   "instrucciones": [
     "Parate erguido con los pies al ancho de la cadera.",

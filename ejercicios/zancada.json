@@ -2,7 +2,7 @@
   "nombre": "Zancada",
   "musculosPrincipales": ["cuádriceps", "glúteos"],
   "musculosSecundarios": ["isquiotibiales", "core"],
-  "equipo": [],
+  "equipo": ["mancuernas"],
   "nivel": "principiante",
   "instrucciones": [
     "Pará con los pies juntos y dá un paso largo hacia adelante.",
