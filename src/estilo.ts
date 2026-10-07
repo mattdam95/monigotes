@@ -1,5 +1,5 @@
 /** Palabras en inglés prohibidas como palabra completa en cues y nombres de paso. */
-const PALABRAS_EN_INGLES = [
+export const PALABRAS_EN_INGLES = [
   "the",
   "and",
   "your",
@@ -21,6 +21,12 @@ const PALABRAS_EN_INGLES = [
 const NOMBRE_KEBAB = /^[a-z0-9]+(-[a-z0-9]+)*\.posecode$/;
 const LINEA_POSECODE = /^posecode\s+(\S+)\s+"(.*)"\s*$/;
 const LINEA_PASO = /^\s*step\s+"([^"]*)"/;
+// El parser no acepta comillas escapadas (\" ) ni comillas embebidas dentro
+// de una cue: el tokenizer de posecode-parser lee la cadena hasta la
+// siguiente comilla y el resto de la línea deja de reconocerse (ver
+// dist/tokenizer.js). Por eso la cue se captura con `[^"]*` sin manejo de
+// escapes: un texto con comillas escapadas es inválido para `parse()` y la
+// regla 3 lo reporta como paso sin cue.
 const LINEA_CUE = /^\s*cue\s+"([^"]*)"\s*$/;
 const LINEA_REPEAT = /^\s*repeat\s+(\d+)\s*$/;
 
@@ -37,12 +43,31 @@ function palabrasInglesas(texto: string): string[] {
 }
 
 /**
+ * Quita el comentario al final de la línea (`#...` o `//...`) que aparece
+ * fuera de una cadena entre comillas, igual que el tokenizer de
+ * posecode-parser. Así, si `parse()` acepta el archivo, un comentario al
+ * final de una línea `cue`, `repeat`, `step` u otra no genera falsos
+ * positivos.
+ */
+function quitarComentario(linea: string): string {
+  let enComillas = false;
+  for (let i = 0; i < linea.length; i++) {
+    const ch = linea[i];
+    if (ch === '"') enComillas = !enComillas;
+    if (enComillas) continue;
+    if (ch === "#") return linea.slice(0, i);
+    if (ch === "/" && linea[i + 1] === "/") return linea.slice(0, i);
+  }
+  return linea;
+}
+
+/**
  * Revisa un archivo `.posecode` contra las reglas de estilo del catálogo.
  * Devuelve una lista de problemas en español; vacía si el archivo está bien.
  */
 export function revisarEstilo(archivo: string, texto: string): string[] {
   const problemas: string[] = [];
-  const lineas = texto.split(/\r?\n/);
+  const lineas = texto.split(/\r?\n/).map(quitarComentario);
 
   // Regla 1: el nombre de archivo es kebab-case ASCII.
   if (!NOMBRE_KEBAB.test(archivo)) {
@@ -89,14 +114,18 @@ export function revisarEstilo(archivo: string, texto: string): string[] {
     const enNombre = palabrasInglesas(paso.nombre);
     if (enNombre.length > 0) {
       problemas.push(
-        `El nombre del paso "${paso.nombre}" contiene palabras en inglés: ${enNombre.join(", ")}`,
+        `El nombre del paso "${paso.nombre}" contiene palabras en inglés: ${enNombre
+          .map((p) => `"${p}"`)
+          .join(", ")}`,
       );
     }
     for (const cue of paso.cues) {
       const enCue = palabrasInglesas(cue);
       if (enCue.length > 0) {
         problemas.push(
-          `El cue del paso "${paso.nombre}" contiene palabras en inglés: ${enCue.join(", ")}`,
+          `El cue del paso "${paso.nombre}" contiene palabras en inglés: ${enCue
+            .map((p) => `"${p}"`)
+            .join(", ")}`,
         );
       }
     }
