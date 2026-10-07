@@ -16,6 +16,7 @@ Catálogo de ejercicios en español, escritos en [Posecode](https://posecode.org
 La skill le permite a un agente armar planes de ejercicio con muñecos animados: busca el ejercicio en el catálogo, si no existe lo escribe en Posecode, lo valida y lo incrusta en un artifact.
 
 - `skill/SKILL.md`: instrucciones para el agente (se escribe aparte, no lo toques salvo que la tarea lo pida).
+- `skill/scripts/validar.mjs`: valida `.posecode` con el parser del repo (la skill lo usa; `posecode-parser validate` no sirve con pnpm).
 - `skill/references/*.md`: **generados** desde el parser por tests con `toMatchFileSnapshot`. No se editan a mano: se regeneran con `pnpm test -- -u` y se commitean. Prettier los ignora.
 - `skill/evals/`: casos de prueba para medir la skill.
 - `src/<modulo>.ts` con su `src/<modulo>.test.ts`. Los fixtures de tests van en `src/__fixtures__/<modulo>/`.
